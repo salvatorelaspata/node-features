@@ -1,0 +1,27 @@
+{
+  "name": "features",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "concurrently \"npm:test1\" \"npm:test2\" \"npm:test3\" \"npm:test-redis\"",
+    "test1": "node src/array.mjs | tap-spec",
+    "test2": "node src/proxies-reflection.mjs | tap-spec",
+    "test3": "node src/generators.mjs | tap-spec",
+    "test-redis": "start:redis && node src/redis.mjs | tap-spec && stop:redis",
+    "start:redis": "sudo docker run --name local-redis -d redis -p 6379:6379",
+    "stop:redis": "sudo docker stop local-redis && sudo docker rm local-redis"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/core-js": "^2.5.5",
+    "concurrently": "^7.6.0",
+    "tap-spec": "^5.0.0"
+  },
+  "dependencies": {
+    "core-js": "^3.24.1",
+    "redis": "^4.5.1"
+  }
+}
