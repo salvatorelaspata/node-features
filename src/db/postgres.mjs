@@ -49,6 +49,5 @@ describe("postgres", () => {
     it("close connection", async() => {
         await sql.end();
     })
-
 })
 
