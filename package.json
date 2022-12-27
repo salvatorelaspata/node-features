@@ -4,13 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "concurrently \"npm:test1\" \"npm:test2\" \"npm:test3\" \"npm:test-redis\"",
-    "test1": "node src/array.mjs | tap-spec",
-    "test2": "node src/proxies-reflection.mjs | tap-spec",
-    "test3": "node src/generators.mjs | tap-spec",
-    "test-redis": "start:redis && node src/redis.mjs | tap-spec && stop:redis",
-    "start:redis": "sudo docker run --name local-redis -d redis -p 6379:6379",
-    "stop:redis": "sudo docker stop local-redis && sudo docker rm local-redis"
+    "test": "concurrently \"npm:test:js\" \"npm:test:db\"",
+    "test:js": "concurrently \"npm:test1\" \"npm:test2\" \"npm:test3\"",
+    "test:db": "concurrently \"npm:test:postgres\" \"npm:test:redis\"",
+    "test1": "node src/js/array.mjs | tap-spec",
+    "test2": "node src/js/proxies-reflection.mjs | tap-spec",
+    "test3": "node src/js/generators.mjs | tap-spec",
+    "test:postgres": "node src/db/postgres.mjs | tap-spec",
+    "test:redis": "node src/db/redis.mjs | tap-spec",
+    "start:postgres": "docker run --name postgres-local -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -e POSTGRES_DB=localdb -d postgres",
+    "stop:postgres": "sudo docker stop postgres-local && sudo docker rm postgres-local",
+    "start:redis": "sudo docker run -d --name redis-stack-server -p 6379:6379 redis/redis-stack-server:latest",
+    "stop:redis": "sudo docker stop redis-stack-server && sudo docker rm redis-stack-server"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +27,7 @@
   },
   "dependencies": {
     "core-js": "^3.24.1",
+    "postgres": "^3.3.2",
     "redis": "^4.5.1"
   }
 }
